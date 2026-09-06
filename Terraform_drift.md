@@ -49,3 +49,12 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # Optional: use your team's notification webhook
 
 ```
+
+## How to Resolve the Drift Once Identified
+Once identified via the plan output, you have two choices depending on your intent:
+
+# Recreate the instance: 
+Run terraform apply to let Terraform automatically spin instance 4 back up so reality matches your code.
+
+# Permanently remove it:
+If the deletion was intentional and you want your infrastructure to match the new lowered count/set, update your Terraform configuration (e.g., reducing your count or removing it from your for_each list) and apply the changes.
