@@ -35,6 +35,11 @@ jobs:
         run: |
           terraform plan -detailed-exitcode -no-color
 
+#terraform plan -detailed-exitcode: Changes how Terraform reports its findings via exit codes:
+#0 = Succeeded, with no changes (infrastructure matches code).
+#1 = Errored / Failed due to a syntax or provider error.
+#2 = Succeeded, but there are changes/drift detected between your code and the actual cloud environment.
+
       - name: Notify on Drift
         if: steps.tf-plan.outputs.exitcode == 2
         uses: 8398a7/action-slack@v3
@@ -53,8 +58,8 @@ jobs:
 ## How to Resolve the Drift Once Identified
 Once identified via the plan output, you have two choices depending on your intent:
 
-# Recreate the instance: 
-Run terraform apply to let Terraform automatically spin instance 4 back up so reality matches your code.
+# Resolve the Drift: 
+Remediation.Apply the appropriate fix based on your decision from Step 2:To discard the change: Run terraform apply. Terraform will recognize that the live resource differs from the code and will automatically overwrite the manual changes to match your configuration.
 
-# Permanently remove it:
-If the deletion was intentional and you want your infrastructure to match the new lowered count/set, update your Terraform configuration (e.g., reducing your count or removing it from your for_each list) and apply the changes.
+# To keep the change: 
+Update your .tf configuration files to reflect the manual updates, then run terraform apply to sync the state file without altering the resource.
