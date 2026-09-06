@@ -2,6 +2,7 @@ When two engineers run `terraform apply` simultaneously without proper state loc
 
 ## 1. **Restore from S3 Object Versioning:** 
 Option A: Remote Backend.
+
 If your state is stored in an AWS S3 bucket, **Object Versioning** is your primary safety net.
 
 1. Open the **S3 Console** and navigate to your Terraform state bucket.
@@ -12,6 +13,7 @@ If your state is stored in an AWS S3 bucket, **Object Versioning** is your prima
 
 ## 2. **Use the Automatic Backup File:**
    Option B: Local Backend.
+   
 If you are running Terraform locally, Terraform automatically writes a backup before modifying the state.
 
 1. Locate your project directory containing `terraform.tfstate`.
@@ -21,11 +23,13 @@ If you are running Terraform locally, Terraform automatically writes a backup be
 
  ## 3. **Run Terraform Plan:**
    Validation.
+   
 Run `terraform plan` to check if Terraform can successfully read the restored state and map it against your live infrastructure.
 
 
  ## 4. **Enable State Locking:**
  Root Cause Prevention.
+ 
 Prevent this from happening again by ensuring state locking is strictly enforced so concurrent runs are blocked automatically:
 
 * If using an S3 backend, enable native locking by adding `use_lockfile = true` in your backend block.
